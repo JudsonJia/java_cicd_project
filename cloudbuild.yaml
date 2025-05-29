@@ -15,7 +15,7 @@ steps:
     args:
       - '-c'
       - |
-        echo "🔨 Building application with Java 8..."
+        echo "🔨 Building application..."
         mvn clean package -DskipTests -B
     id: 'build'
     waitFor: ['test']
@@ -25,16 +25,16 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/java-cicd-app:$COMMIT_SHA'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/java-cicd-app:latest'
+      - 'gcr.io/$PROJECT_ID/java-user-app:latest'
       - '.'
     id: 'docker-build'
     waitFor: ['build']
 
-  # Step 4: Push image to Container Registry
+  # Step 4: Push to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '--all-tags', 'gcr.io/$PROJECT_ID/java-cicd-app']
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/java-user-app:latest'
     id: 'push'
     waitFor: ['docker-build']
 
@@ -43,9 +43,9 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'java-cicd-app'
+      - 'java-user-app'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/java-cicd-app:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/java-user-app:latest'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -57,22 +57,12 @@ steps:
       - '1Gi'
       - '--cpu'
       - '2'
-      - '--max-instances'
-      - '10'
-      - '--timeout'
-      - '300'
     id: 'deploy'
     waitFor: ['push']
-
-# Options
-options:
-  logging: CLOUD_LOGGING_ONLY
-  machineType: 'E2_STANDARD_2'
 
 # Build timeout
 timeout: '3600s'
 
-# Specify images to be pushed to Container Registry
+# Images to be pushed
 images:
-  - 'gcr.io/$PROJECT_ID/java-cicd-app:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/java-cicd-app:latest'
+  - 'gcr.io/$PROJECT_ID/java-user-app:latest'
