@@ -1,12 +1,21 @@
 steps:
-  # Step 1: Run tests
+  # Step 1: Debug and Run tests
   - name: 'maven:3.6.3-openjdk-8'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "🧪 Running tests with Java 8..."
-        mvn clean test -B -Dstyle.color=always
+        echo "🔍 Project structure check..."
+        find . -type f -name "*.java" | head -20
+        echo ""
+        echo "📁 Test directory structure:"
+        ls -la src/ || echo "src directory not found"
+        ls -la src/test/ || echo "src/test directory not found"  
+        ls -la src/test/java/ || echo "src/test/java directory not found"
+        find src/test -name "*Test.java" 2>/dev/null || echo "No test files found"
+        echo ""
+        echo "🧪 Running Maven tests..."
+        mvn clean test -B -Dstyle.color=always -X
     id: 'test'
 
   # Step 2: Build application
