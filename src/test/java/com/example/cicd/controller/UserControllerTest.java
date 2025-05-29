@@ -112,35 +112,38 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.message").value("User deleted successfully"));
     }
 
-    // ========== INTENTIONALLY FAILING TESTS (3) ==========
+    // ========== FIXED TESTS (3) ==========
 
     @Test
-    public void testCreateUserInvalidData_WILL_FAIL() throws Exception {
+    public void testCreateUserInvalidData() throws Exception {
         // Create user with invalid data (empty name and invalid email)
         User invalidUser = new User(null, "", "invalid-email", "");
 
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUser)))
-                .andExpect(status().isOk()); // INTENTIONAL FAILURE - should be 400
+                .andExpect(status().isBadRequest()); // FIXED - expects 400 Bad Request
     }
 
     @Test
-    public void testGetNonExistentUser_WILL_FAIL() throws Exception {
+    public void testGetNonExistentUser() throws Exception {
         when(userService.getUserById(999L)).thenReturn(null);
 
         mockMvc.perform(get("/api/users/999"))
-                .andExpect(status().isOk()); // INTENTIONAL FAILURE - should be 404
+                .andExpect(status().isNotFound()); // FIXED - expects 404 Not Found
     }
 
     @Test
-    public void testUpdateUser_WILL_FAIL() throws Exception {
+    public void testUpdateUser() throws Exception {
         User updatedUser = new User(1L, "Updated Name", "updated@example.com", "Updated Dept");
         when(userService.updateUser(anyLong(), any(User.class))).thenReturn(updatedUser);
 
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedUser)))
-                .andExpect(status().isCreated()); // INTENTIONAL FAILURE - should be 200
+                .andExpect(status().isOk()) // FIXED - expects 200 OK
+                .andExpect(jsonPath("$.name").value("Updated Name"))
+                .andExpect(jsonPath("$.email").value("updated@example.com"))
+                .andExpect(jsonPath("$.department").value("Updated Dept"));
     }
 }
