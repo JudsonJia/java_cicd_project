@@ -141,9 +141,10 @@ public class UserControllerTest {
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedUser)))
-                .andExpect(status().isOk()) // FIXED - expects 200 OK
-                .andExpect(jsonPath("$.name").value("Updated Name"))
-                .andExpect(jsonPath("$.email").value("updated@example.com"))
-                .andExpect(jsonPath("$.department").value("Updated Dept"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user.name").value("Updated Name"))
+                .andExpect(jsonPath("$.user.email").value("updated@example.com"))
+                .andExpect(jsonPath("$.user.department").value("Updated Dept"))
+                .andExpect(jsonPath("$.message").value("User updated successfully"));
     }
 }
