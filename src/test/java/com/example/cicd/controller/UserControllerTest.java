@@ -3,14 +3,12 @@ package com.example.cicd.controller;
 import com.example.cicd.model.User;
 import com.example.cicd.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -22,7 +20,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -38,7 +35,7 @@ public class UserControllerTest {
     private User testUser1;
     private User testUser2;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         testUser1 = new User(1L, "John Doe", "john@example.com", "Engineering");
         testUser2 = new User(2L, "Jane Smith", "jane@example.com", "Marketing");
