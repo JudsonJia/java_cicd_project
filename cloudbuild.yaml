@@ -60,6 +60,10 @@ steps:
     id: 'deploy'
     waitFor: ['push']
 
+# 修复日志配置
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 # Build timeout
 timeout: '3600s'
 
