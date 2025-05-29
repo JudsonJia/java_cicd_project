@@ -1,0 +1,3 @@
+com\example\cicd\controller\UserControllerTest.class
+com\example\cicd\CicdApplicationTests.class
+com\example\cicd\service\UserServiceTest.class

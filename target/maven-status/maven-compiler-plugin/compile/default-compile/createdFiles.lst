@@ -1,0 +1,4 @@
+com\example\cicd\CicdApplication.class
+com\example\cicd\model\User.class
+com\example\cicd\service\UserService.class
+com\example\cicd\controller\UserController.class
